@@ -1,0 +1,38 @@
+Esercizio 1 – Follower e seguiti (Instagram)
+
+// 1. Crea/Verifica gli Utenti
+CREATE (:Utente {nome: 'Anna'}),
+       (:Utente {nome: 'Luca'}),
+       (:Utente {nome: 'Marco'}),
+       (:Utente {nome: 'Giulia'}),
+       (:Utente {nome: 'Elena'})
+
+// 2. Crea/Verifica le Relazioni
+// Anna segue Luca e Marco
+MATCH (a:Utente {nome: 'Anna'}), (l:Utente {nome: 'Luca'}), (m:Utente {nome: 'Marco'})
+CREATE (a)-[:SEGUE]->(l), (a)-[:SEGUE]->(m);
+
+// Marco segue Anna
+MATCH (m:Utente {nome: 'Marco'}), (a:Utente {nome: 'Anna'})
+CREATE (m)-[:SEGUE]->(a);
+
+// Giulia segue tutti gli altri (Anna, Luca, Marco, Elena)
+MATCH (g:Utente {nome: 'Giulia'}), (altri:Utente)
+WHERE altri.nome <> 'Giulia'
+CREATE (g)-[:SEGUE]->(altri);
+
+// Utenti con più di 1 follower
+MATCH (u:Utente)<-[:SEGUE]-(f)
+WITH u, count(f) AS numeroFollower
+WHERE numeroFollower > 1
+RETURN u.nome, numeroFollower
+
+// Chi non segue nessuno (es. Elena)
+MATCH (u:Utente)
+WHERE NOT (u)-[:SEGUE]->()
+RETURN u.nome AS UtenteSolitario
+
+
+
+
+
