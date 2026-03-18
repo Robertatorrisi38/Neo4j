@@ -1,0 +1,19 @@
+Esercizio 2 – Amicizie vicendevoli (Facebook)
+
+CREATE (alice:Persona {nome: 'Alice'}),
+       (bob:Persona {nome: 'Bob'}),
+       (carol:Persona {nome: 'Carol'}),
+       (dan:Persona {nome: 'Dan'})
+
+// Amicizie reciproche
+CREATE (alice)-[:AMICO]->(bob), (bob)-[:AMICO]->(alice),
+       (alice)-[:AMICO]->(carol), (carol)-[:AMICO]->(alice),
+       (bob)-[:AMICO]->(dan), (dan)-[:AMICO]->(bob)
+
+MATCH (n:Persona) RETURN n LIMIT 25;
+
+MATCH (p1:Persona)-[:AMICO]->(p2:Persona)
+WHERE p1.nome < p2.nome
+RETURN p1.nome, p2.nome
+
+MATCH p=()-[:AMICO]->() RETURN p LIMIT 25;
